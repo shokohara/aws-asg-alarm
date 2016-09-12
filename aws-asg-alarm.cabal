@@ -25,6 +25,9 @@ executable aws-asg-alarm-exe
   ghc-options:         -threaded -rtsopts -with-rtsopts=-N
   build-depends:       base
                      , aws-asg-alarm
+                     , lens
+                     , aeson
+                     , lens-aeson
   default-language:    Haskell2010
 
 test-suite aws-asg-alarm-test
