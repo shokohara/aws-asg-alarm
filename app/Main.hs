@@ -12,13 +12,15 @@ import Data.Aeson.Lens
 import Data.Aeson.TH
 import GHC.Generics
 
-data Record = Record { eEventVersion :: String } deriving Show
-data Event = Event { rRecords :: [Record] } deriving Show
+data Record = Record { eEventVersion :: String } deriving (Show, Generic)
+data Event = Event { rRecords :: [Record] } deriving (Show, Generic)
 data Context = Context { callbackWaitsForEmptyEventLoop :: Bool } deriving (Show, Generic)
 data Root = Root { event :: Event, context :: Context } deriving (Show, Generic)
 
-deriveJSON defaultOptions { fieldLabelModifier = drop 1 } ''Record
-deriveJSON defaultOptions { fieldLabelModifier = drop 1 } ''Event
+instance FromJSON Record where
+  parseJSON = genericParseJSON defaultOptions { fieldLabelModifier = drop 1 }
+instance FromJSON Event where
+  parseJSON = genericParseJSON defaultOptions { fieldLabelModifier = drop 1 }
 instance FromJSON Context
 instance FromJSON Root
 
