@@ -1,0 +1,23 @@
+#!/usr/bin/env zsh
+[ $# -eq 1 ] || exit 1
+set -eux
+
+which aws-lambda-haskell > /dev/null || installAwsLambdaHaskell
+local scriptDirPath=$(dirname $(readlink -f $0))
+local rootDirPath=$scriptDirPath/..
+cd $scriptDirPath
+mv $rootDirPath/.stack-work{,.host} | :
+sudo mv $rootDirPath/.stack-work{.docker,.stack-work} | :
+rm $scriptDirPath/.cidfile
+aws-lambda-haskell lambda build --build-target aws-asg-alarm-exe --source-directory $rootDirPath
+docker rm `cat $scriptDirPath/.cidfile`
+sudo mv $rootDirPath/.stack-work{,.docker}
+aws lambda update-function-code --function-name ${1} --zip-file fileb://$scriptDirPath/lambda.zip
+
+function installAwsLambdaHaskell {
+  rm -rf aws-lambda-haskell
+  git clone --depth=1 https://github.com/shokohara/aws-lambda-haskell.git
+  cd `echo $_ | awk -F/ '{print $NF}' | sed -e 's/.git$//'`
+  stack install
+}
+
