@@ -5,10 +5,10 @@ set -eux
 which aws-lambda-haskell > /dev/null || installAwsLambdaHaskell
 local scriptDirPath=$(dirname $(readlink -f $0))
 local rootDirPath=$scriptDirPath/..
-cd $scriptDirPath
 mv $rootDirPath/.stack-work{,.host} | :
 sudo mv $rootDirPath/.stack-work{.docker,.stack-work} | :
 rm $scriptDirPath/.cidfile
+cd $scriptDirPath
 aws-lambda-haskell lambda build --build-target aws-asg-alarm-exe --source-directory $rootDirPath
 docker rm `cat $scriptDirPath/.cidfile`
 sudo mv $rootDirPath/.stack-work{,.docker}

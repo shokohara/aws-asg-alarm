@@ -1,15 +1,20 @@
+{-# LANGUAGE OverloadedStrings #-}
 module Main where
 
 import Lambda
-import Slack
+import Control.Lens
+import Network.Slack.Webhook
 import Data.ByteString.Lazy.Char8 hiding (putStrLn)
 import Data.Aeson
 import System.IO
+import Network.AWS
+import Network.AWS.Lambda
 
-url = "https://hooks.slack.com/services/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"
+functionDescription = do
+  e <- newEnv NorthVirginia Discover
+  runResourceT . runAWS e . send $ getFunctionConfiguration "haskell-test-youcandeletethisfunction"
+
 main :: IO ()
 main = do
-  ln <- getLine
-  x <- sendMessage url ln
-  putStrLn $ "Got: " ++ ln
-
+  ex <- functionDescription
+  print $ ex ^. fcDescription

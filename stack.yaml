@@ -4,6 +4,9 @@ flags:
 extra-package-dbs: []
 packages:
 - '.'
+- location:
+    git: 'https://github.com/shokohara/slack-webhook'
+    commit: '0cb96b6ad8441ad003f5dc336e4b5200fd7570b0'
 extra-deps:
 - StateVar-1.1.0.4
 - adjunctions-4.3
@@ -39,4 +42,5 @@ extra-deps:
 - unordered-containers-0.2.7.1
 - vector-0.11.0.0
 - void-0.7.1
-resolver: lts-7.1
+resolver: lts-7.2
+

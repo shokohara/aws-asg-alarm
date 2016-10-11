@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE DeriveGeneric #-}
-module Slack where
+module Slack (sendMessage) where
 
 import Data.Aeson
 import GHC.Generics
